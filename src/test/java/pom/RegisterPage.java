@@ -60,10 +60,10 @@ public class RegisterPage {
         driver.findElement(password).sendKeys(passwordUser);
     }
 
-    @Step("Ожидание текст Некорректный пароль")
-    public void visibilityTextPassword () {
+    @Step("Ожидание текст Некорректный пароль и возврат")
+    public String getTextPassword () {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(textPassword ));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(textPassword)).getText();
     }
 
     @Step("Клик кнопка Зарегистрироваться")

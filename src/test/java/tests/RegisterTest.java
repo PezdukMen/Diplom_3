@@ -2,9 +2,11 @@ package tests;
 
 import api.User;
 import api.UserClient;
+import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utill.UserGenerator;
@@ -30,8 +32,8 @@ public class RegisterTest extends BaseTest {
 
     @Test
     @DisplayName("Успешная регистрация пользователя")
+    @Description("Ожидаем url страницы login")
     public void shouldSuccessfulRegistration() {
-        objMainPage.invisibilityAnimation(); // Ожидание проигрывания анимации
         objMainPage.clickPersonalAccount();
         objLoginPage.clickRegister();
         objRegisterPage.sendKeysName(registeredUser.getName());
@@ -40,21 +42,28 @@ public class RegisterTest extends BaseTest {
         objRegisterPage.clickRegister();
         // Проверка текста "Вход" на страницы login, после успешной регистрации
         objLoginPage.visibilityTextEntrance();
-        // Входим под пользователем СРАЗУ сохраняем токен из ответа входа
+
+        String expectedUrl = "https://stellarburgers.education-services.ru/login";
+        String actualUrl = objLoginPage.getUrl();
+        Assert.assertEquals(expectedUrl, actualUrl);
+
+        // После проверки входим под пользователем СРАЗУ сохраняем токен из ответа входа
         Response response = userClient.loginUser(registeredUser);
         accessToken = userClient.extractToken(response);
     }
 
     @Test
     @DisplayName("Ошибка для некорректного пароля. Минимальный пароль — шесть символов")
+    @Description("Ожидаем текст Некорректный пароль")
     public void shouldErrorNotCorrectPassword() {
-        objMainPage.invisibilityAnimation(); // Ожидание проигрывания анимации
         objMainPage.clickPersonalAccount();
         objLoginPage.clickRegister();
         objRegisterPage.sendKeysPassword("12345"); // менее 6 символов
         objRegisterPage.clickRegister();
         // Проверка текста "Некорректный пароль" на страницы register, после введения пароля менее 6 символов
-        objRegisterPage.visibilityTextPassword();
+        String expected = "Некорректный пароль";
+        String actual = objRegisterPage.getTextPassword();
+        Assert.assertEquals(expected, actual);
     }
 
 }

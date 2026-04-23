@@ -20,6 +20,9 @@ public class MainPage {
     // Кнопка "Войти в аккаунт"
     private By logAccount = By.xpath(".//button[text()='Войти в аккаунт']");
 
+    // Текст "Соберите бургер"
+    private By textBurger = By.xpath(".//h1[text()='Соберите бургер']");
+
     // Конструктор - кнопка "Булки"
     private By buns = By.cssSelector(".tab_tab__1SPyG:nth-child(1)");
     // Конструктор - текст "Булки"
@@ -59,16 +62,22 @@ public class MainPage {
         invisibilityAnimation();
     }
 
+    @Step("Ожидание текст Соберите бургер")
+    public void visibilityTextBurger() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(textBuns));
+    }
+
     @Step("Клик кнопка Булки")
     public void clickBuns() throws InterruptedException {
         Thread.sleep(500);
         driver.findElement(buns).click();
     }
 
-    @Step("Ожидание текст Булки")
-    public void visibilityTextBuns() {
+    @Step("Ожидание текст Булки и возврат")
+    public String getTextBuns() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(textBuns));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(textBuns)).getText();
     }
 
     @Step("Клик кнопка Соусы")
@@ -77,10 +86,10 @@ public class MainPage {
         driver.findElement(sauces).click();
     }
 
-    @Step("Ожидание текст Соусы")
-    public void visibilityTextSauces() {
+    @Step("Ожидание текст Соусы и возврат")
+    public String getTextSauces() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(textSauces));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(textSauces)).getText();
     }
 
     @Step("Клик кнопка Начинки")
@@ -89,10 +98,10 @@ public class MainPage {
         driver.findElement(fillings).click();
     }
 
-    @Step("Ожидание текст Начинки")
-    public void visibilityTextFillings() {
+    @Step("Ожидание текст Начинки и возврат")
+    public String getTextFillings() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(textFillings));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(textFillings)).getText();
     }
 
     // Ожидание проигрывания Анимации
@@ -117,6 +126,11 @@ public class MainPage {
     public void attributeContainsFillings() {
         new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(ExpectedConditions.attributeContains(fillings, "class", "current"));
+    }
+
+    // Получения URL страницы
+    public String getUrl() {
+        return driver.getCurrentUrl();
     }
 
 }

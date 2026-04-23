@@ -88,4 +88,9 @@ public class LoginPage {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(animation));
     }
 
+    // Получения URL страницы
+    public String getUrl() {
+        return driver.getCurrentUrl();
+    }
+
 }
